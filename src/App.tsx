@@ -1,16 +1,29 @@
-import React, { useEffect } from 'react';
-import './App.css';
-import { ACCOUNT_QUERY } from './queries/accountQuery';
 import { useQuery } from '@apollo/client';
+import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+
+import './App.css';
+
+import { ACCOUNT_QUERY } from './queries/accountQuery';
 
 function App() {
   const { data } = useQuery(ACCOUNT_QUERY);
   useEffect(() => {
-    console.log(data)
+    console.log(data);
   });
   return (
     <div className="App">
-      {data && data.allAccounts.map((dataItem: any)=> dataItem.first_name)}
+      <Router>
+        {data && data.allAccounts.map((dataItem: any) => dataItem.first_name)}
+        <Switch>
+          <Route path="/">
+          </Route>
+          <Route path="/accounts">
+          </Route>
+          <Route path="/transactions">
+          </Route>
+        </Switch>
+      </Router>
     </div>
   );
 }

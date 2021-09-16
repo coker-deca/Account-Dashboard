@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 
 import Totals from '../components/features/Totals';
 import DashBoardLayout, { AggregateI } from '../components/templates/DashboardLayout';
-import groupBy from '../constants/groupBy';
+import {groupBy} from '../constants/helpers';
 import { ACCOUNT_QUERY } from '../queries/accountQuery';
 
 const AccountsPage = () => {
@@ -15,17 +15,17 @@ const AccountsPage = () => {
     {
       name: "Accounts",
       amount: accountTotals,
-      url: "/",
+      url: "/accounts",
     },
     {
       name: "Savings",
       amount: savingsTotals,
-      url: "/",
+      url: "/accounts",
     },
     {
       name: "Cheques",
       amount: chequeTotals,
-      url: "/",
+      url: "/accounts",
     },
   ];
 

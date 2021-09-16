@@ -5,7 +5,7 @@ import Totals from "../components/features/Totals";
 import DashBoardLayout, {
   AggregateI,
 } from "../components/templates/DashboardLayout";
-import groupBy from "../constants/groupBy";
+import {groupBy} from "../constants/helpers";
 import { TRANSACTION_QUERY } from "../queries/transactionQuery";
 
 const TransactionsPage = () => {
@@ -17,17 +17,17 @@ const TransactionsPage = () => {
     {
       name: "Transactions",
       amount: transactionTotals,
-      url: "/",
+      url: "/transactions",
     },
     {
       name: "Credits",
       amount: debitTotals,
-      url: "/",
+      url: "/transactions",
     },
     {
       name: "Debits",
       amount: creditTotals,
-      url: "/",
+      url: "/transactions",
     },
   ];
 

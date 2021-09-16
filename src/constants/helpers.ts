@@ -16,3 +16,9 @@ interface CoordValues {
 export const getCoordValues = (array: CoordValues[], zoom = 1): MapInterface[] => array.map((coord) => {
     return { coordinates: [coord.long, coord.lat], zoom }
 })
+export const getTotalByBranch = (transactions: any) => {
+    const transactionsByBranch = groupBy(transactions, "branch");
+    const branches = Object.keys(transactionsByBranch);
+    const totalByBranch = branches.map((branch) => ({ name: branch, amount: transactionsByBranch[branch].length }));
+    return totalByBranch;
+}

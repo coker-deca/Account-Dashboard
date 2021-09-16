@@ -1,17 +1,16 @@
 import { useQuery } from '@apollo/client';
 import { useEffect, useState } from 'react';
-import Totals from '../components/features/Totals';
 
+import Totals from '../components/features/Totals';
+import DashBoardLayout, { AggregateI } from '../components/templates/DashboardLayout';
 import groupBy from '../constants/groupBy';
 import { ACCOUNT_QUERY } from '../queries/accountQuery';
-import { AggregateI } from './Dashboard';
 
 const AccountsPage = () => {
   const { data: accountsData } = useQuery(ACCOUNT_QUERY);
   const [accountTotals, setAccountTotals] = useState(0);
   const [savingsTotals, setSavingsTotals] = useState(0);
   const [chequeTotals, setChequeTotals] = useState(0);
-  const accounts = accountsData?.allAccounts || [];
   const totals: AggregateI[] = [
     {
       name: "Accounts",
@@ -31,12 +30,17 @@ const AccountsPage = () => {
   ];
 
   useEffect(() => {
+    const accounts = accountsData?.allAccounts || [];
     const allTotals = accounts?.length;
     const { cheque, savings } = groupBy(accounts, "type");
     setAccountTotals(allTotals);
     setSavingsTotals(savings.length);
     setChequeTotals(cheque.length);
-  }, [accounts]);
-  return <Totals totals={totals} />;
+  }, [accountsData?.allAccounts]);
+  return (
+    <DashBoardLayout>
+      <Totals totals={totals} />
+    </DashBoardLayout>
+  );
 };
 export default AccountsPage;

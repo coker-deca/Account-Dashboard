@@ -1,7 +1,7 @@
 import { Card } from 'antd';
 import { FC } from 'react';
 import { useHistory } from 'react-router';
-import { AggregateI } from '../../pages/Dashboard';
+import { AggregateI } from '../templates/DashboardLayout';
 
 const Total: FC<{ total: AggregateI }> = ({ total }) => {
   const history = useHistory();

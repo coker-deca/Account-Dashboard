@@ -1,4 +1,5 @@
-import styled from "styled-components";
+import styled from 'styled-components';
+
 export const Wrapper = styled.div`
 #components-layout-demo-responsive .logo {
   height: 32px;
@@ -12,8 +13,10 @@ export const Wrapper = styled.div`
 
 .site-layout-background {
   background: #fff;
-  display: flex;
-  justify-content: space-around;
+  .aggregate {
+    display: flex;
+    justify-content: space-around;
+  }
 }
 
 h1 {

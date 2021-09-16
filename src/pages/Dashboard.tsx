@@ -8,8 +8,9 @@ import {
 import { useQuery } from '@apollo/client';
 import { Layout, Menu } from 'antd';
 import React, { useEffect, useState } from 'react';
+import Totals from '../components/features/Totals';
 
-import Totals from '../components/Totals';
+import Total from '../components/ui/Total';
 import { currentDate, firstday, lastday } from '../constants/dates';
 import { ACCOUNT_QUERY } from '../queries/accountQuery';
 import { SESSION_QUERY } from '../queries/sessionQueries';
@@ -17,11 +18,18 @@ import { TRANSACTION_QUERY } from '../queries/transactionQuery';
 import { Wrapper } from './style';
 
 const { Header, Content, Sider, Footer } = Layout;
+
+export interface AggregateI {
+  name: string;
+  amount: number;
+  url: string;
+}
+
 const DashBoardLayout = () => {
   const [collapsed, setCollapsed] = useState(false);
-  const [accountTotals, setAccountTotals] = useState<any>(0);
-  const [transactionTotals, setTransactionTotals] = useState<any>(0);
-  const [sessionTotals, setSessionTotals] = useState<any>(0);
+  const [accountTotals, setAccountTotals] = useState(0);
+  const [transactionTotals, setTransactionTotals] = useState(0);
+  const [sessionTotals, setSessionTotals] = useState(0);
   const { data: accountsData } = useQuery(ACCOUNT_QUERY);
   const { data: transactionsData } = useQuery(TRANSACTION_QUERY);
   const { data: sessionsData } = useQuery(SESSION_QUERY);
@@ -35,7 +43,7 @@ const DashBoardLayout = () => {
     setSessionTotals(sessions?.length);
   }, [accounts, transactions, sessions]);
 
-  const totals = [
+  const totals: AggregateI[] = [
     {
       name: "Accounts",
       amount: accountTotals,
@@ -91,9 +99,7 @@ const DashBoardLayout = () => {
               className="site-layout-background"
               style={{ padding: 24, minHeight: 360 }}
             >
-              {totals.map((total: any) => (
-                <Totals total={total} />
-              ))}
+              <Totals totals={totals} />
             </div>
           </Content>
           <Footer style={{ textAlign: "center" }}>

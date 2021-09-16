@@ -22,7 +22,14 @@ const DashBoard = () => {
   const sessions = sessionsData?.allSessions;
 
   useEffect(() => {
-    console.log(firstday, lastday, currentDate);
+    console.log(
+      "firstday: ",
+      firstday,
+      "lastday: ",
+      lastday,
+      "currentDate: ",
+      currentDate
+    );
     setAccountTotals(accounts?.length);
     setTransactionTotals(transactions?.length);
     setSessionTotals(sessions?.length);

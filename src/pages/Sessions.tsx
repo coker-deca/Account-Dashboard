@@ -13,6 +13,7 @@ const SessionsPage = () => {
   const { data: sessionData } = useQuery(SESSION_QUERY);
   const [sessionTotals, setSessionTotals] = useState(0);
   const [coordinates, setCoordinates] = useState<MapInterface[]>([]);
+  const [dateValue, setDateValue] = useState("");
   const totals: AggregateI[] = [
     {
       name: "Sessions",
@@ -20,7 +21,8 @@ const SessionsPage = () => {
       url: "/sessions",
     },
   ];
-
+  const useValue = (value: string) => setDateValue(value);
+  
   useEffect(() => {
     const sessions = sessionData?.allSessions || [];
     const values: MapInterface[] = getCoordValues(sessions);
@@ -30,7 +32,7 @@ const SessionsPage = () => {
     setSessionTotals(allTotals);
   }, [sessionData?.allSessions]);
   return (
-    <DashBoardLayout>
+    <DashBoardLayout clickedKeys={['3']} useValue={useValue}>
       <Totals totals={totals} />
       <Maps coordinates={coordinates} />
     </DashBoardLayout>

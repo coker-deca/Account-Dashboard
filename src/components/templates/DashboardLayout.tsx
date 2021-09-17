@@ -1,25 +1,33 @@
 import {
-    AccountBookOutlined,
-    GlobalOutlined,
-    MenuFoldOutlined,
-    MenuUnfoldOutlined,
-    TransactionOutlined,
+  AccountBookOutlined,
+  GlobalOutlined,
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
+  TransactionOutlined,
 } from '@ant-design/icons';
-import { Layout, Menu } from 'antd';
+import { DatePicker, Layout, Menu, Select } from 'antd';
 import React, { useState } from 'react';
+import { useHistory } from 'react-router';
+import getDates from '../../constants/dates';
 
 import { Wrapper } from './style';
 
 const { Header, Content, Sider, Footer } = Layout;
-
+const { Option } = Select;
+const { RangePicker } = DatePicker;
 export interface AggregateI {
   name: string;
   amount: number;
   url: string;
 }
 
-const DashBoardLayout: React.FunctionComponent = ({ children }) => {
+const DashBoardLayout: React.FunctionComponent<{
+  useValue: (value: any) => void;
+  clickedKeys: string[];
+}> = ({ clickedKeys, children, useValue }) => {
   const [collapsed, setCollapsed] = useState(false);
+  const [selectedDates, setSelectedDates] = useState<string | string[]>([]);
+  const history = useHistory();
 
   const sidebar = [
     { name: "Accounts", icon: <AccountBookOutlined />, key: "1" },
@@ -28,7 +36,25 @@ const DashBoardLayout: React.FunctionComponent = ({ children }) => {
   ];
   const toggle = () => setCollapsed(!collapsed);
 
+  const handleChangeTab = ({ key }: { key: string }) => {
+    const url =
+      key == "1" ? "/accounts" : key == "2" ? "/transactions" : "/sessions";
+    history.push(url);
+  };
+  
   const handleClick = ({ key }: { key: string }) => console.log(key);
+  
+  const handleChange = (value: any) => {
+    console.log(`selected ${value}`);
+    if (value==='7days') setSelectedDates(getDates())
+  }
+  
+  const onChange = (date: any, dateString: string | string[]) => {
+    console.log(date, dateString);
+    setSelectedDates(dateString);
+  }
+  useValue(selectedDates)
+
   return (
     <Wrapper>
       <Layout>
@@ -37,11 +63,15 @@ const DashBoardLayout: React.FunctionComponent = ({ children }) => {
           <Menu
             theme="dark"
             mode="inline"
-            defaultSelectedKeys={["1"]}
+            defaultSelectedKeys={clickedKeys || ["1"]}
             onClick={handleClick}
           >
             {sidebar.map((item) => (
-              <Menu.Item key={item.key} icon={item.icon}>
+              <Menu.Item
+                key={item.key}
+                icon={item.icon}
+                onClick={handleChangeTab}
+              >
                 {item.name}
               </Menu.Item>
             ))}
@@ -49,8 +79,8 @@ const DashBoardLayout: React.FunctionComponent = ({ children }) => {
         </Sider>
         <Layout className="site-layout">
           <Header
-            className="site-layout-sub-header-background"
             style={{ padding: 0 }}
+            className="site-layout-sub-header-background"
           >
             {React.createElement(
               collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
@@ -59,6 +89,18 @@ const DashBoardLayout: React.FunctionComponent = ({ children }) => {
                 onClick: toggle,
               }
             )}
+            <div>
+              <Select
+                defaultValue="7days"
+                style={{ width: 120 }}
+                onChange={handleChange}
+              >
+                <Option value="7days">Last 7 Days</Option>
+                <Option value="custom">
+                  <RangePicker onChange={onChange} />
+                </Option>
+              </Select>
+            </div>
           </Header>
           <Content style={{ margin: "24px 16px 0" }}>
             <div

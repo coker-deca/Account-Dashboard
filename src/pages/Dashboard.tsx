@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 
 import Totals from '../components/features/Totals';
 import DashBoardLayout, { AggregateI } from '../components/templates/DashboardLayout';
-import { currentDate, firstday, lastday } from '../constants/dates';
 import { ACCOUNT_QUERY } from '../queries/accountQuery';
 import { SESSION_QUERY } from '../queries/sessionQueries';
 import { TRANSACTION_QUERY } from '../queries/transactionQuery';
@@ -12,6 +11,7 @@ const DashBoard = () => {
   const [accountTotals, setAccountTotals] = useState(0);
   const [transactionTotals, setTransactionTotals] = useState(0);
   const [sessionTotals, setSessionTotals] = useState(0);
+  const [dateValue, setDateValue] = useState<string[]>([]);
 
   const { data: accountsData } = useQuery(ACCOUNT_QUERY);
   const { data: transactionsData } = useQuery(TRANSACTION_QUERY);
@@ -20,16 +20,9 @@ const DashBoard = () => {
   const accounts = accountsData?.allAccounts;
   const transactions = transactionsData?.allTransactions;
   const sessions = sessionsData?.allSessions;
+  const useValue = (value: string[]) => setDateValue(value);
 
   useEffect(() => {
-    console.log(
-      "firstday: ",
-      firstday,
-      "lastday: ",
-      lastday,
-      "currentDate: ",
-      currentDate
-    );
     setAccountTotals(accounts?.length);
     setTransactionTotals(transactions?.length);
     setSessionTotals(sessions?.length);
@@ -54,7 +47,7 @@ const DashBoard = () => {
   ];
 
   return (
-    <DashBoardLayout>
+    <DashBoardLayout useValue={useValue} clickedKeys={["1"]}>
       <Totals totals={totals} />
     </DashBoardLayout>
   );

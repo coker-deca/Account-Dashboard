@@ -1,10 +1,9 @@
-const currentDate = new Date();
-const firstday = new Date(
-  currentDate.setDate(currentDate.getDate() - currentDate.getDay())
-).toISOString();
-const lastday = new Date(
-  currentDate.setDate(currentDate.getDate() - currentDate.getDay() + 7)
-).toISOString();
-console.log(firstday, lastday);
+import moment from 'moment';
+const getDates = () => {
+  const firstDay = moment(new Date()).format('YYYY-MM-DD');
+  const lastDay = moment(new Date()).add(7,'days').format('YYYY-MM-DD');
+  console.log(firstDay, lastDay);
+  return [firstDay, lastDay]
+}
 
-export {currentDate, firstday, lastday}
+export default getDates;

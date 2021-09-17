@@ -32,9 +32,12 @@ const SessionsPage = () => {
     setSessionTotals(allTotals);
   }, [sessionData?.allSessions]);
   return (
-    <DashBoardLayout clickedKeys={['3']} useValue={useValue}>
+    <DashBoardLayout clickedKeys={["3"]} useValue={useValue}>
       <Totals totals={totals} />
       <Maps coordinates={coordinates} />
+      <h3>
+        Start Time: {dateValue[0]} === End Time: {dateValue[1]}
+      </h3>
     </DashBoardLayout>
   );
 };

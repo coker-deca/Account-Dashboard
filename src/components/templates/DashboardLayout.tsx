@@ -38,19 +38,15 @@ const DashBoardLayout: React.FunctionComponent<{
 
   const handleChangeTab = ({ key }: { key: string }) => {
     const url =
-      key == "1" ? "/accounts" : key == "2" ? "/transactions" : "/sessions";
+      key === "1" ? "/accounts" : key === "2" ? "/transactions" : "/sessions";
     history.push(url);
   };
-  
-  const handleClick = ({ key }: { key: string }) => console.log(key);
-  
+    
   const handleChange = (value: any) => {
-    console.log(`selected ${value}`);
     if (value==='7days') setSelectedDates(getDates())
   }
   
   const onChange = (date: any, dateString: string | string[]) => {
-    console.log(date, dateString);
     setSelectedDates(dateString);
   }
   useValue(selectedDates)
@@ -64,7 +60,6 @@ const DashBoardLayout: React.FunctionComponent<{
             theme="dark"
             mode="inline"
             defaultSelectedKeys={clickedKeys || ["1"]}
-            onClick={handleClick}
           >
             {sidebar.map((item) => (
               <Menu.Item

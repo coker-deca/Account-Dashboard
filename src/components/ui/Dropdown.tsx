@@ -22,7 +22,6 @@ const SelectBox: React.FC<{
     close && setShowItems(false);
   }, []);
   const selectItem = useCallback((items) => {
-    console.log(items);
     setSelectedItem(items);
     items.id === 2 ? setShowDates(true) : setShowItems(false);
   }, []);

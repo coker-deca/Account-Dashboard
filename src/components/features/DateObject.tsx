@@ -15,7 +15,6 @@ const DateObjectPicker: React.FC<{
   const handleChange = useCallback(
     (items) => {
       setValue(items);
-      Array.isArray(value) && console.log(typeof value, value.length);
       typeof value === "object" &&
         Array.isArray(value) &&
         value.length === 1 &&
@@ -25,9 +24,6 @@ const DateObjectPicker: React.FC<{
   );
 
   useValue(value?.toString());
-  useEffect(() => {
-    console.log(value?.toString());
-  });
   return (
     <DatePicker format={format} value={value} range onChange={handleChange} />
   );

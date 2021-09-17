@@ -64,7 +64,7 @@ const TransactionsPage = () => {
     setCreditTotals(debit?.length);
     setDebitTotals(credit?.length);
     executeSearch();
-  }, [transactionData, dateValue]);
+  }, [transactionData, dateValue, filteredTransactionData?.allTransactions, executeSearch]);
   return (
     <DashBoardLayout useValue={useValue} clickedKeys={["2"]}>
       <Totals totals={totals} />

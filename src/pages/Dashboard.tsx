@@ -49,6 +49,9 @@ const DashBoard = () => {
   return (
     <DashBoardLayout useValue={useValue} clickedKeys={["1"]}>
       <Totals totals={totals} />
+      <h3>
+        Start Time: {dateValue[0]} === End Time: {dateValue[1]}
+      </h3>
     </DashBoardLayout>
   );
 };

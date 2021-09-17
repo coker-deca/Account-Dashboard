@@ -59,7 +59,8 @@ const AccountsPage = () => {
     setChequeTotals(cheque?.length);
     const dailyValues = getTotalByDays(filteredAccounts, dateValue);
     setDailyData(dailyValues);
-  }, [accountsData?.allAccounts, dateValue]);
+    executeSearch();
+  }, [accountsData?.allAccounts, dateValue, executeSearch, filteredAccountData?.allAccounts]);
   return (
     <DashBoardLayout useValue={useValue} clickedKeys={['1']}>
       <Totals totals={totals} />

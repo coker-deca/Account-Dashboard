@@ -21,7 +21,6 @@ export const groupByDate = (list: any[], dateRange: string[]) => {
     const daysArray = Array.from(Array(difference).keys());
     const allDays: any = {};
     daysArray.forEach(day => allDays[`${day}`] = []);
-    console.log('values', list)
     const total = list.reduce((result, currentValue) => {
         const findDifference = dateDiffInDays(new Date(dateRange[0]), currentValue['created_at']);
         (result[`${findDifference}`] = result[`${findDifference}`] || []).push(
@@ -29,7 +28,6 @@ export const groupByDate = (list: any[], dateRange: string[]) => {
             );
             return result;
         }, allDays);
-    console.log('values: ', total);
     return total;
 };    
 
@@ -46,7 +44,6 @@ export const getTotalByBranch = (transactions: any) => {
 
 export const getTotalByDays = (transactions: any, dateRange: string[]) => {
     const transactionsByBranch = dateRange.length > 1 && transactions.length > 1 && groupByDate(transactions, dateRange);
-    console.log('transactions', transactions);
     const days = Object.keys(transactionsByBranch);
     const totalByDays = days.map((day) => ({ name: 'Day'+day, amount: transactionsByBranch[day].length }));
     return totalByDays;

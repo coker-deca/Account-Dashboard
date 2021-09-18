@@ -53,15 +53,21 @@ const AccountsPage = () => {
 
   useEffect(() => {
     const accounts = accountsData?.allAccounts || [];
-    const filteredAccounts = filteredAccountData?.allAccounts || [];
     const allTotals = accounts?.length;
     const { cheque, savings } = groupBy(accounts, "type");
     setAccountTotals(allTotals);
     setSavingsTotals(savings?.length);
     setChequeTotals(cheque?.length);
-    const dailyValues = getTotalByDays(filteredAccounts, dateValue);
-    setDailyData(dailyValues);
-  }, [accountsData?.allAccounts, dateValue, executeSearch, filteredAccountData?.allAccounts]);
+  }, [accountsData?.allAccounts]);
+
+  useEffect(() => {
+    const filteredAccounts = filteredAccountData?.allAccounts || [];
+    if (filteredAccounts.length && dateValue[0] && dateValue[1]) {
+      const dailyValues = getTotalByDays(filteredAccounts, dateValue);
+      setDailyData(dailyValues);
+    }
+  }, [dateValue, filteredAccountData]);
+
   return (
     <DashBoardLayout
       useValue={useValue}

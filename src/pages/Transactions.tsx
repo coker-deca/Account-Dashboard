@@ -52,24 +52,25 @@ const TransactionsPage = () => {
   ];
   useEffect(() => {
     const transactions = transactionData?.allTransactions || [];
-    const filteredTransactions = filteredTransactionData?.allTransactions || [];
     const allTotals = transactions?.length;
     const { credit, debit } = groupBy(transactions, "type");
     const branchValues = getTotalByBranch(transactions);
-    if (dateValue[0] && dateValue[1]) {
-      const dailyValues = getTotalByDays(filteredTransactions, dateValue);
-      setDailyData(dailyValues);
-    }
     setBranchData(branchValues);
     setTransactionTotals(allTotals);
     setCreditTotals(debit?.length);
     setDebitTotals(credit?.length);
   }, [
     transactionData,
-    dateValue,
-    filteredTransactionData?.allTransactions,
     executeSearch,
   ]);
+
+  useEffect(() => {
+    const filteredTransactions = filteredTransactionData?.allTransactions || [];
+    if (filteredTransactions.length && dateValue[0] && dateValue[1]) {
+      const dailyValues = getTotalByDays(filteredTransactions, dateValue);
+      setDailyData(dailyValues);
+    }
+  }, [dateValue, filteredTransactionData]);
   return (
     <DashBoardLayout
       useValue={useValue}

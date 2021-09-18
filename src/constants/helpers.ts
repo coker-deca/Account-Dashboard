@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { MapInterface } from '../components/features/Map';
 
 interface CoordValues {
@@ -43,16 +44,12 @@ export const getTotalByBranch = (transactions: any) => {
 }
 
 export const getTotalByDays = (transactions: any, dateRange: string[]) => {
-    const transactionsByBranch = dateRange.length > 1 && transactions.length > 1 && groupByDate(transactions, dateRange);
-    const days = Object.keys(transactionsByBranch);
-    const totalByDays = days.map((day) => ({ name: 'Day'+day, amount: transactionsByBranch[day].length }));
+    const transactionsByDays = groupByDate(transactions, dateRange);
+    const days = Object.keys(transactionsByDays);
+    const totalByDays = days.map((day) => ({ name: 'Day'+day, amount: transactionsByDays[day].length }));
     return totalByDays;
 }
 
 export const dateDiffInDays = (a: Date, b: Date) => {
-  // Discard the time and time-zone information.
-  const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
-  const utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
-
-  return Math.floor((utc2 - utc1) / _MS_PER_DAY);
+return moment(b).diff(moment(a), 'days')
 }

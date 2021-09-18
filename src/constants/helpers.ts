@@ -7,8 +7,6 @@ interface CoordValues {
     long: number;
 }
 
-const _MS_PER_DAY = 1000 * 60 * 60 * 24;
-
 export const groupBy = (list: any[], prop: string) => {
     return list.reduce((result, currentValue) => {
         (result[currentValue[prop]] = result[currentValue[prop]] || []).push(

@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 
 export const Wrapper = styled.div`
+margin-bottom: 40px;
+
 #components-layout-demo-responsive .logo {
   height: 32px;
   margin: 16px;
@@ -20,6 +22,13 @@ export const Wrapper = styled.div`
   display: flex;
   align-items: center;
   padding:15px !important;
+}
+
+.chart-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 50px;
 }
 
 .site-layout-background {

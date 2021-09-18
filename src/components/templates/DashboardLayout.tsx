@@ -67,7 +67,7 @@ const DashBoardLayout: React.FunctionComponent<{
           <Menu
             theme="dark"
             mode="inline"
-            defaultSelectedKeys={clickedKeys || ["1"]}
+            defaultSelectedKeys={clickedKeys || ["0"]}
           >
             {sidebar.map((item) => (
               <Menu.Item

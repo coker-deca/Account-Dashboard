@@ -78,10 +78,12 @@ const TransactionsPage = () => {
       clickedKeys={["2"]}
     >
       <Totals totals={totals} />
-      <Charts data={branchData} title="Transactions by Branch" />
-      {!loading && dateValue.length > 1 && dailyData.length && (
-        <Charts data={dailyData} title="Transactions by Days" />
-      )}
+      <div className='chart-container'>
+        <Charts data={branchData} title="Transactions by Branch" />
+        {!loading && dateValue.length > 1 && dailyData.length && (
+          <Charts data={dailyData} title="Transactions by Days" />
+        )}
+      </div>
     </DashBoardLayout>
   );
 };

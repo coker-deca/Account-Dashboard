@@ -75,9 +75,11 @@ const AccountsPage = () => {
       clickedKeys={["1"]}
     >
       <Totals totals={totals} />
-      {!loading && dateValue.length > 1 && dailyData.length && (
-        <Charts data={dailyData} title="Accounts by Days" />
-      )}
+      <div className='chart-container'>
+        {!loading && dateValue.length > 1 && dailyData.length && (
+          <Charts data={dailyData} title="Accounts by Days" />
+        )}
+      </div>
     </DashBoardLayout>
   );
 };

@@ -14,8 +14,8 @@ const Charts: React.FC<{ data: ChartInterface[]; title: string }> = ({
     <Wrapper>
       <h2>{title}</h2>
       <BarChart
-        width={500}
-        height={300}
+        width={900}
+        height={500}
         data={data}
         margin={{
           top: 5,

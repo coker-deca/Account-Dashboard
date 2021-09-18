@@ -8,8 +8,8 @@ import {
 import { DatePicker, Layout, Menu, Select } from 'antd';
 import React, { useState } from 'react';
 import { useHistory } from 'react-router';
-import getDates from '../../constants/dates';
 
+import getDates from '../../constants/dates';
 import { Wrapper } from './style';
 
 const { Header, Content, Sider, Footer } = Layout;
@@ -24,7 +24,8 @@ export interface AggregateI {
 const DashBoardLayout: React.FunctionComponent<{
   useValue: (value: any) => void;
   clickedKeys: string[];
-}> = ({ clickedKeys, children, useValue }) => {
+  executeDateRequest?: (start: string, end: string) => void;
+}> = ({ clickedKeys, children, useValue, executeDateRequest }) => {
   const [collapsed, setCollapsed] = useState(false);
   const [selectedDates, setSelectedDates] = useState<string | string[]>([]);
   const history = useHistory();
@@ -41,15 +42,22 @@ const DashBoardLayout: React.FunctionComponent<{
       key === "1" ? "/accounts" : key === "2" ? "/transactions" : "/sessions";
     history.push(url);
   };
-    
+
   const handleChange = (value: any) => {
-    if (value==='7days') setSelectedDates(getDates())
-  }
-  
+    if (value === "7days") {
+      const last7 = getDates();
+      setSelectedDates(last7);
+      executeDateRequest && executeDateRequest(last7[0], last7[1]);
+    }
+  };
+
   const onChange = (date: any, dateString: string | string[]) => {
-    setSelectedDates(dateString);
+    if (Array.isArray(dateString) && dateString.length > 1) {
+      setSelectedDates(dateString);
+      executeDateRequest && executeDateRequest(dateString[0], dateString[1]);
+    };
   }
-  useValue(selectedDates)
+  useValue(selectedDates);
 
   return (
     <Wrapper>
@@ -86,10 +94,11 @@ const DashBoardLayout: React.FunctionComponent<{
             )}
             <div>
               <Select
-                defaultValue="7days"
+                defaultValue="None"
                 style={{ width: 120 }}
                 onChange={handleChange}
               >
+                <Option value="None" disabled>Pick A Date Range</Option>
                 <Option value="7days">Last 7 Days</Option>
                 <Option value="custom">
                   <RangePicker onChange={onChange} />

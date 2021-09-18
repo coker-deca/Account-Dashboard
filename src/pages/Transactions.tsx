@@ -1,5 +1,5 @@
 import { useLazyQuery, useQuery } from '@apollo/client';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import Charts, { ChartInterface } from '../components/features/Charts';
 import Totals from '../components/features/Totals';
@@ -12,8 +12,6 @@ const TransactionsPage = () => {
   const [branchData, setBranchData] = useState<ChartInterface[]>([]);
   const [dailyData, setDailyData] = useState<ChartInterface[]>([]);
   const [transactionTotals, setTransactionTotals] = useState(0);
-  const [startDate, setStartDate] = useState<any>();
-  const [endDate, setEndDate] = useState<any>();
   const [debitTotals, setCreditTotals] = useState(0);
   const [creditTotals, setDebitTotals] = useState(0);
   const [dateValue, setDateValue] = useState<string[]>([]);
@@ -21,15 +19,19 @@ const TransactionsPage = () => {
     setDateValue(value);
   };
 
-  const [executeSearch, { data: filteredTransactionData }] = useLazyQuery(
-    TRANSACTION_QUERY_DATE,
-    {
+  const [executeSearch, { loading, data: filteredTransactionData }] = useLazyQuery(
+    TRANSACTION_QUERY_DATE
+  );
+
+  const getFilteredData = useCallback((start: string, end: string) => {
+    executeSearch({
       variables: {
-        filter: { created_at_lte: endDate, created_at_gte: startDate },
+        created_at_lte: end,
+        created_at_gte: start,
         sortField: "created_at",
       },
-    }
-  );
+    });
+  }, [executeSearch]);
 
   const totals: AggregateI[] = [
     {
@@ -48,28 +50,35 @@ const TransactionsPage = () => {
       url: "/transactions",
     },
   ];
-
   useEffect(() => {
-    setStartDate(dateValue[0]);
-    setEndDate(dateValue[1]);
     const transactions = transactionData?.allTransactions || [];
     const filteredTransactions = filteredTransactionData?.allTransactions || [];
     const allTotals = transactions?.length;
     const { credit, debit } = groupBy(transactions, "type");
     const branchValues = getTotalByBranch(transactions);
-    const dailyValues = getTotalByDays(filteredTransactions, dateValue);
+    if (dateValue[0] && dateValue[1]) {
+      const dailyValues = getTotalByDays(filteredTransactions, dateValue);
+      setDailyData(dailyValues);
+    }
     setBranchData(branchValues);
-    setDailyData(dailyValues);
     setTransactionTotals(allTotals);
     setCreditTotals(debit?.length);
     setDebitTotals(credit?.length);
-    executeSearch();
-  }, [transactionData, dateValue, filteredTransactionData?.allTransactions, executeSearch]);
+  }, [
+    transactionData,
+    dateValue,
+    filteredTransactionData?.allTransactions,
+    executeSearch,
+  ]);
   return (
-    <DashBoardLayout useValue={useValue} clickedKeys={["2"]}>
+    <DashBoardLayout
+      useValue={useValue}
+      executeDateRequest={getFilteredData}
+      clickedKeys={["2"]}
+    >
       <Totals totals={totals} />
       <Charts data={branchData} title="Transactions by Branch" />
-      {dateValue.length > 1 && dailyData.length && (
+      {!loading && dateValue.length > 1 && dailyData.length && (
         <Charts data={dailyData} title="Transactions by Days" />
       )}
     </DashBoardLayout>

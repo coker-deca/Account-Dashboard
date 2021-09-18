@@ -1,5 +1,5 @@
 import { useLazyQuery, useQuery } from '@apollo/client';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Charts, { ChartInterface } from '../components/features/Charts';
 
 import Totals from '../components/features/Totals';
@@ -8,8 +8,6 @@ import {getTotalByDays, groupBy} from '../constants/helpers';
 import { ACCOUNT_QUERY, ACCOUNT_QUERY_DATE } from "../queries/accountQuery";
 
 const AccountsPage = () => {
-  const [startDate, setStartDate] = useState<any>();
-  const [endDate, setEndDate] = useState<any>();
   const [dateValue, setDateValue] = useState<string[]>([]);
   const [dailyData, setDailyData] = useState<ChartInterface[]>([]);
   const { data: accountsData } = useQuery(ACCOUNT_QUERY);
@@ -36,20 +34,24 @@ const AccountsPage = () => {
   const useValue = (value: string[]) => {
     setDateValue(value);
   };
-  const [executeSearch, { data: filteredAccountData }] = useLazyQuery(
+  const [executeSearch, { loading, data: filteredAccountData }] = useLazyQuery(
     ACCOUNT_QUERY_DATE,
-    {
-      variables: {
-        filter: { created_at_lte: endDate, created_at_gte: startDate },
-        sortField: "created_at",
-      },
-    }
   );
 
+  const getFilteredData = useCallback(
+    (start: string, end: string) => {
+      executeSearch({
+        variables: {
+          created_at_lte: end,
+          created_at_gte: start,
+          sortField: "created_at",
+        },
+      });
+    },
+    [executeSearch]
+  );
 
   useEffect(() => {
-    setStartDate(dateValue[0]);
-    setEndDate(dateValue[1]);
     const accounts = accountsData?.allAccounts || [];
     const filteredAccounts = filteredAccountData?.allAccounts || [];
     const allTotals = accounts?.length;
@@ -59,12 +61,15 @@ const AccountsPage = () => {
     setChequeTotals(cheque?.length);
     const dailyValues = getTotalByDays(filteredAccounts, dateValue);
     setDailyData(dailyValues);
-    executeSearch();
   }, [accountsData?.allAccounts, dateValue, executeSearch, filteredAccountData?.allAccounts]);
   return (
-    <DashBoardLayout useValue={useValue} clickedKeys={['1']}>
+    <DashBoardLayout
+      useValue={useValue}
+      executeDateRequest={getFilteredData}
+      clickedKeys={["1"]}
+    >
       <Totals totals={totals} />
-      {dateValue.length > 1 && dailyData.length && (
+      {!loading && dateValue.length > 1 && dailyData.length && (
         <Charts data={dailyData} title="Accounts by Days" />
       )}
     </DashBoardLayout>
